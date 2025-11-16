@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر التطبيقات الفاخر | Lux App Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ------------------------------------- */
+        /* المتغيرات والألوان الاحترافية */
+        /* ------------------------------------- */
+        :root {
+            --primary-color: #007bff;     /* أزرق نقي - للتركيز */
+            --secondary-color: #6c757d;   /* رمادي هادئ */
+            --background-light: #f4f7f9;  /* خلفية فاتحة */
+            --background-dark: #1f2833;   /* خلفية داكنة للموقع */
+            --card-color: #ffffff;        /* لون بطاقة التطبيق */
+            --text-dark: #212529;         /* لون النص الأساسي */
+            --text-light: #f4f7f9;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+        }
+
+        /* ------------------------------------- */
+        /* التنسيقات العامة */
+        /* ------------------------------------- */
+        body {
+            font-family: 'Cairo', 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+            direction: rtl; /* اتجاه الموقع الافتراضي */
+            transition: all 0.3s ease;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        p, a {
+            font-weight: 400;
+        }
+
+        /* ------------------------------------- */
+        /* شريط التنقل (Header) */
+        /* ------------------------------------- */
+        .header {
+            background-color: var(--background-dark);
+            color: white;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .admin-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .admin-link:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* ------------------------------------- */
+        /* القسم الرئيسي (App Store) */
+        /* ------------------------------------- */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            color: var(--text-light);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .app-card {
+            background-color: var(--card-color);
+            color: var(--text-dark);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20%;
+            margin-bottom: 15px;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-card h3 {
+            font-size: 1.5rem;
+            margin: 10px 0;
+            color: var(--text-dark);
+        }
+
+        .app-card p {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .app-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--success-color);
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        .app-price.free {
+            color: var(--primary-color);
+        }
+
+        .download-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .download-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* ------------------------------------- */
+        /* النافذة المنبثقة (Admin Modal) */
+        /* ------------------------------------- */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.7); 
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-content input[type="password"] {
+            width: 80%;
+            padding: 12px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .modal-content button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .modal-content button:hover {
+            background-color: #0056b3;
+        }
+
+        /* ------------------------------------- */
+        /* لوحة التحكم (Admin Panel) */
+        /* ------------------------------------- */
+        #adminPanel {
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            padding: 40px;
+            min-height: 100vh;
+            display: none;
+        }
+
+        .admin-header {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h2 {
+            color: var(--primary-color);
+        }
+
+        .control-form {
+            background-color: var(--card-color);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-form input, .control-form select, .control-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .control-form button {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .control-form button:hover {
+            background-color: #1e7e34;
+        }
+        
+        .app-list-control {
+            margin-top: 40px;
+        }
+        
+        .app-item-control {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        
+        .delete-btn {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* ------------------------------------- */
+        /* الـ Responsive */
+        /* ------------------------------------- */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .header h1 {
+                margin-bottom: 10px;
+            }
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="appStore">
+        
+        <header class="header">
+            <h1><i class="fas fa-store"></i> متجر التطبيقات الفاخر</h1>
+            <a href="#" class="admin-link" onclick="openAdminModal(event)">
+                <i class="fas fa-lock"></i> لوحة التحكم
+            </a>
+        </header>
+
+        <div class="container">
+            <h2 class="section-title">✨ تطبيقاتنا المميزة اليوم</h2>
+            
+            <div class="app-grid" id="appGrid">
+                </div>
+        </div>
+
+    </div>
+
+    <div id="adminModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <i class="fas fa-user-shield" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;"></i>
+            <h3>الوصول إلى لوحة الإدارة</h3>
+            <p>الرجاء إدخال كلمة المرور للتحكم في محتوى المتجر.</p>
+            <input type="password" id="adminPassword" placeholder="كلمة المرور">
+            <button onclick="checkPassword()">دخول</button>
+            <p id="authMessage" style="color: var(--danger-color); margin-top: 10px; display: none;">كلمة المرور غير صحيحة.</p>
+        </div>
+    </div>
+    
+    <div id="adminPanel" style="display: none;">
+        <div class="container">
+            <div class="admin-header">
+                <h2><i class="fas fa-tools"></i> لوحة التحكم الإدارية (محاكاة)</h2>
+                <button class="delete-btn" onclick="logoutAdmin()">العودة للمتجر</button>
+            </div>
+            
+            <div class="control-form">
+                <h3>إضافة تطبيق جديد</h3>
+                <input type="text" id="appName" placeholder="اسم التطبيق (مثل: MoodScape AI)" required>
+                <input type="text" id="appImage" placeholder="رابط صورة الأيقونة (مثال: https://via.placeholder.com/80/007bff/fff)" value="https://via.placeholder.com/80/007bff/fff" required>
+                <textarea id="appDescription" placeholder="وصف قصير للتطبيق" rows="2" required></textarea>
+                <input type="number" id="appPrice" placeholder="سعر التطبيق (صفر للمجاني)" min="0" required>
+                <button onclick="addApp()"><i class="fas fa-plus"></i> إضافة التطبيق</button>
+            </div>
+            
+            <div class="app-list-control">
+                <h3>التطبيقات الحالية</h3>
+                <div id="currentAppsList">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // -------------------------------------
+        // البيانات الأولية (للمحاكاة فقط)
+        // -------------------------------------
+        const ADMIN_PASSWORD = "123/123";
+        let applications = [
+            { id: 1, name: "MoodScape AI", image: "https://via.placeholder.com/80/007bff/fff?text=AI", description: "مساعد ذكاء اصطناعي فائق السرعة يعالج 100 تريليون نقطة بيانات.", price: 0 },
+            { id: 2, name: "Luxury Wallet", image: "https://via.placeholder.com/80/28a745/fff?text=W", description: "أفضل تطبيق لإدارة الأموال والميزانية الشخصية باحترافية.", price: 4.99 },
+            { id: 3, name: "Pro Editor", image: "https://via.placeholder.com/80/dc3545/fff?text=E", description: "أداة تحرير صور وفيديو متقدمة للمحترفين والمصممين.", price: 9.99 },
+            { id: 4, name: "Secure VPN", image: "https://via.placeholder.com/80/6c757d/fff?text=V", description: "شبكة افتراضية خاصة لحماية خصوصيتك وأمان بياناتك.", price: 1.99 },
+        ];
+        let nextAppId = 5; // للمحافظة على مُعرف فريد
+
+        // -------------------------------------
+        // وظائف الواجهة الأمامية (المتجر)
+        // -------------------------------------
+
+        function renderAppGrid() {
+            const appGrid = document.getElementById('appGrid');
+            appGrid.innerHTML = ''; // تفريغ الشبكة قبل إعادة البناء
+
+            applications.forEach(app => {
+                const priceText = app.price === 0 ? 
+                    `<span class="app-price free">مجاني</span>` : 
+                    `<span class="app-price">$${app.price.toFixed(2)}</span>`;
+                
+                const card = `
+                    <div class="app-card">
+                        <img src="${app.image}" alt="${app.name} Icon" class="app-icon">
+                        <h3>${app.name}</h3>
+                        <p>${app.description}</p>
+                        ${priceText}
+                        <button class="download-btn"><i class="fas fa-download"></i> تنزيل</button>
+                    </div>
+                `;
+                appGrid.innerHTML += card;
+            });
+        }
+
+        // -------------------------------------
+        // وظائف لوحة التحكم (الإدارة)
+        // -------------------------------------
+
+        function renderAdminList() {
+            const currentAppsList = document.getElementById('currentAppsList');
+            currentAppsList.innerHTML = '';
+
+            applications.forEach(app => {
+                const listItem = `
+                    <div class="app-item-control">
+                        <span>${app.name} (${app.price === 0 ? 'مجاني' : `$${app.price.toFixed(2)}`})</span>
+                        <button class="delete-btn" onclick="deleteApp(${app.id})"><i class="fas fa-trash-alt"></i> حذف</button>
+                    </div>
+                `;
+                currentAppsList.innerHTML += listItem;
+            });
+            
+            if (applications.length === 0) {
+                 currentAppsList.innerHTML = '<p style="color: #6c757d; text-align: center;">لا يوجد تطبيقات حالياً في المتجر.</p>';
+            }
+        }
+        
+        function addApp() {
+            const name = document.getElementById('appName').value;
+            const image = document.getElementById('appImage').value;
+            const description = document.getElementById('appDescription').value;
+            const price = parseFloat(document.getElementById('appPrice').value);
+
+            if (!name || !image || !description || isNaN(price)) {
+                alert('الرجاء ملء جميع الحقول بشكل صحيح.');
+                return;
+            }
+
+            const newApp = {
+                id: nextAppId++,
+                name,
+                image,
+                description,
+                price
+            };
+
+            applications.push(newApp);
+
+            // مسح الحقول بعد الإضافة
+            document.getElementById('appName').value = '';
+            document.getElementById('appDescription').value = '';
+            document.getElementById('appPrice').value = 0;
+            
+            // تحديث الواجهتين
+            renderAppGrid();
+            renderAdminList();
+            alert('تمت إضافة التطبيق بنجاح!');
+        }
+        
+        function deleteApp(appId) {
+            applications = applications.filter(app => app.id !== appId);
+            
+            // تحديث الواجهتين
+            renderAppGrid();
+            renderAdminList();
+            alert('تم حذف التطبيق بنجاح!');
+        }
+        
+        // -------------------------------------
+        // وظائف حماية كلمة المرور
+        // -------------------------------------
+        
+        function openAdminModal(event) {
+            event.preventDefault(); 
+            document.getElementById('adminModal').style.display = 'flex';
+            document.getElementById('adminPassword').value = ''; 
+            document.getElementById('authMessage').style.display = 'none';
+        }
+
+        function checkPassword() {
+            const passwordInput = document.getElementById('adminPassword').value;
+            const authMessage = document.getElementById('authMessage');
+
+            if (passwordInput === ADMIN_PASSWORD) {
+                // الدخول الناجح
+                document.getElementById('adminModal').style.display = 'none';
+                document.getElementById('appStore').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                document.body.style.backgroundColor = 'var(--background-light)';
+                
+                // عرض قائمة التطبيقات في لوحة التحكم
+                renderAdminList();
+
+            } else {
+                // كلمة المرور خاطئة
+                authMessage.style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+            }
+        }
+        
+        function logoutAdmin() {
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('appStore').style.display = 'block';
+            document.body.style.backgroundColor = 'var(--background-dark)';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        // -------------------------------------
+        // التشغيل الأولي
+        // -------------------------------------
+        window.onload = function() {
+            renderAppGrid();
+        };
+
+    </script>
+</body>
+</html>
